@@ -1,0 +1,159 @@
+﻿namespace CavRnMods.HotWheels
+{
+    using Eco.Gameplay.Components.Storage;
+    using Eco.Core.Controller;
+    using Eco.Core.Items;
+    using Eco.Gameplay.Components.Auth;
+    using Eco.Gameplay.Components;
+    using Eco.Gameplay.Items.Recipes;
+    using Eco.Gameplay.Items;
+    using Eco.Gameplay.Objects;
+    using Eco.Gameplay.Occupancy;
+    using Eco.Gameplay.Skills;
+    using Eco.Gameplay.Systems.NewTooltip;
+    using Eco.Mods.TechTree;
+    using Eco.Shared.Items;
+    using Eco.Shared.Localization;
+    using Eco.Shared.Serialization;
+    using System.Collections.Generic;
+    using System;
+    using static Eco.Gameplay.Components.PartsComponent;
+
+    [Serialized]
+    [LocDisplayName("Jet Ski")]
+    [LocDescription("A fast electric personal watercraft.")]
+    [IconGroup("World Object Minimap")]
+    [Weight(20000)]
+    [SalvageCost(typeof(IronScrap), 8.0f, typeof(PlasticScrap), 6.0f, typeof(CopperScrap), 3.0f, typeof(ElectronicScrap), 0.5f, typeof(ChemicalWaste), 0.2f)]
+    [WaterPlaceable]
+    [Ecopedia("Crafted Objects", "Vehicles", createAsSubPage: true)]
+    public partial class JetSkiItem : WorldObjectItem<JetSkiObject>, IPersistentData
+    {
+        public float InteractDistance => DefaultInteractDistance.WaterPlacement;
+        public bool ShouldHighlight(Type block) => false;
+        [Serialized, SyncToView, NewTooltipChildren(CacheAs.Instance, flags: TTFlags.AllowNonControllerTypeForChildren)] public object? PersistentData { get; set; }
+    }
+
+    /// <summary>
+    /// <para>Server side recipe definition for "JetSki".</para>
+    /// <para>More information about RecipeFamily objects can be found at https://docs.play.eco/api/server/eco.gameplay/Eco.Gameplay.Items.RecipeFamily.html</para>
+    /// </summary>
+    /// <remarks>
+    /// This is an auto-generated class. Don't modify it! All your changes will be wiped with next update! Use Mods* partial methods instead for customization.
+    /// If you wish to modify this class, please create a new partial class or follow the instructions in the "UserCode" folder to override the entire file.
+    /// </remarks>
+    [RequiresSkill(typeof(ShipwrightSkill), 5)]
+    [Ecopedia("Crafted Objects", "Vehicles", subPageName: "Jet Ski Item")]
+    public partial class JetSkiRecipe : RecipeFamily
+    {
+        public JetSkiRecipe()
+        {
+            var recipe = new Recipe();
+            recipe.Init(
+                name: "JetSki",  //noloc
+                displayName: Localizer.DoStr("Jet Ski"),
+
+                // Defines the ingredients needed to craft this recipe. An ingredient items takes the following inputs
+                // type of the item, the amount of the item, the skill required, and the talent used.
+                ingredients: new List<IngredientElement>
+                {
+                    new IngredientElement(typeof(IronHullSheetItem), 6, typeof(ShipwrightSkill)),
+                    new IngredientElement(typeof(SteelBarItem), 4, typeof(ShipwrightSkill)),
+                    new IngredientElement(typeof(PlasticItem), 30, typeof(ShipwrightSkill)),
+                    new IngredientElement(typeof(AdvancedCircuitItem), 2, typeof(ShipwrightSkill)),
+                    new IngredientElement(typeof(BasicCircuitItem), 4, typeof(ShipwrightSkill)),
+                    new IngredientElement(typeof(CopperWiringItem), 20, typeof(ShipwrightSkill)),
+                    new IngredientElement(typeof(NylonMooringRopeItem), 1, true),
+                    new IngredientElement(typeof(MetalRudderItem), 1, true),
+                    new IngredientElement(typeof(ElectricMotorItem), 1, true),
+                    new IngredientElement(typeof(MediumMetalShipFrameItem), 1, true),
+                    new IngredientElement(typeof(LubricantItem), 1, true),
+                },
+
+                // Define our recipe output items.
+                // For every output item there needs to be one CraftingElement entry with the type of the final item and the amount
+                // to create.
+                items: new List<CraftingElement>
+                {
+                    new CraftingElement<JetSkiItem>()
+                });
+            this.Recipes = new List<Recipe> { recipe };
+            this.ExperienceOnCraft = 10; // Defines how much experience is gained when crafted.
+
+            // Defines the amount of labor required and the required skill to add labor
+            this.LaborInCalories = CreateLaborInCaloriesValue(1000, typeof(ShipwrightSkill));
+
+            // Defines our crafting time for the recipe
+            this.CraftMinutes = CreateCraftTimeValue(beneficiary: typeof(JetSkiRecipe), start: 5, skillType: typeof(ShipwrightSkill));
+
+            // Perform pre/post initialization for user mods and initialize our recipe instance with the display name "Jet Ski"
+            this.ModsPreInitialize();
+            this.Initialize(displayText: Localizer.DoStr("Jet Ski"), recipeType: typeof(JetSkiRecipe));
+            this.ModsPostInitialize();
+
+            // Register our RecipeFamily instance with the crafting system so it can be crafted.
+            CraftingComponent.AddRecipe(tableType: typeof(MediumShipyardObject), recipeFamily: this);
+        }
+
+        /// <summary>Hook for mods to customize RecipeFamily before initialization. You can change recipes, xp, labor, time here.</summary>
+        partial void ModsPreInitialize();
+
+        /// <summary>Hook for mods to customize RecipeFamily after initialization, but before registration. You can change skill requirements here.</summary>
+        partial void ModsPostInitialize();
+    }
+
+    [Serialized]
+    [RequireComponent(typeof(StandaloneAuthComponent))]
+    [RequireComponent(typeof(PublicStorageComponent))]
+    [RequireComponent(typeof(ElectricCarComponent))]
+    [RequireComponent(typeof(MovableLinkComponent))]
+    [RequireComponent(typeof(VehicleComponent))]
+    [RequireComponent(typeof(BoatComponent))]
+    [RequireComponent(typeof(MinimapComponent))]
+    [RequireComponent(typeof(PaintableComponent))]
+    [RequireComponent(typeof(PartsComponent))]
+    [RepairRequiresSkill(typeof(ShipwrightSkill), 5)]
+    [Ecopedia("Crafted Objects", "Vehicles", subPageName: "Jet Ski Item")]
+    public partial class JetSkiObject : PhysicsWorldObject, IRepresentsItem
+    {
+        static JetSkiObject()
+        {
+            WorldObject.AddOccupancy<JetSkiObject>(new List<BlockOccupancy>(0));
+        }
+        public override float InteractDistance => DefaultInteractDistance.WaterPlacement;
+        public override TableTextureMode TableTexture => TableTextureMode.Wood;
+        public override bool PlacesBlocks            => false;
+        public override LocString DisplayName { get { return Localizer.DoStr("Jet Ski"); } }
+        public Type RepresentedItemType { get { return typeof(JetSkiItem); } }
+
+        private JetSkiObject() { }
+        protected override void Initialize()
+        {
+            this.ModsPreInitialize();
+            base.Initialize();
+            this.GetComponent<VehicleComponent>().HumanPowered(0.75f);
+            this.GetComponent<PublicStorageComponent>().Initialize(4, 120000);
+            this.GetComponent<PublicStorageComponent>().Storage.AddInvRestriction(new NotCarriedRestriction());
+            this.GetComponent<MinimapComponent>().InitAsMovable();
+            this.GetComponent<MinimapComponent>().SetCategory(Localizer.DoStr("Vehicles"));
+            this.GetComponent<VehicleComponent>().Initialize(24, 2, 2, null, true);
+            this.GetComponent<ElectricCarComponent>().Initialize(2625000, 2000);
+            this.GetComponent<BoatComponent>().Size = BoatComponent.BoatSize.Small;
+            this.GetComponent<VehicleComponent>().FailDriveMsg = Localizer.Do($"You are too hungry to drive {this.DisplayName}!");
+            this.ModsPostInitialize();
+                        {
+                this.GetComponent<PartsComponent>().Config(() => LocString.Empty, new PartInfo[]
+                {
+                                        new() { TypeName = nameof(IronHullSheetItem), Quantity = 2},
+                                        new() { TypeName = nameof(ElectricMotorItem), Quantity = 1},
+                                        new() { TypeName = nameof(LubricantItem), Quantity = 1},
+                                    });
+            }
+        }
+
+        /// <summary>Hook for mods to customize before initialization. You can change housing values here.</summary>
+        partial void ModsPreInitialize();
+        /// <summary>Hook for mods to customize after initialization.</summary>
+        partial void ModsPostInitialize();
+    }
+}
