@@ -1,3 +1,14 @@
+4.1.0
+- New: Solar mode for the Wall Charger is back. The Wall Charger has a Solar Charging tab with its status and a Toggle Solar Mode button. With solar mode on, the charger uses no grid power and charges the connected vehicle only in daylight (06:00 to 18:00 on the sky clock). At night it switches itself off and the vehicle stays connected; it switches back on in the morning.
+- New: The Multi-Row Wheel Hoe's Ecopedia page has a How to use section.
+- Changed: Hot Wheels Rework now ships as source files in Mods/UserCode/HotWheelsRework, next to the original Hot Wheels source, so it can extend the original's Wall Charger. Remove any older Rework copy (HotWheelsRework.dll) from your Mods folder.
+
+4.0.0
+- Changed: Hot Wheels Rework is now an add-on to the original Hot Wheels mod by Zangdar, which is a required dependency on mod.io and is installed automatically. All the vehicles and chargers come from the original mod.
+- New: Multi-Row Wheel Hoe. A pushable wheel hoe with one front wheel, two long handles and three rows of tines, with its own 3D model. Grab the handles to push it, and it tills a strip three blocks wide in front of it as it moves. Click it while on foot to switch plowing off or back on. Plowing costs no calories.
+- New: The Multi-Row Wheel Hoe is crafted at the Wainwright Table with Basic Engineering level 3.
+- Removed: Our own copies of the original vehicles, chargers and parts, since the original mod now provides them. The earlier fixes to those (no food needed to drive, door calories, Wall Charger tab, solar mode and charge rate) are not part of this version.
+
 3.4.1
 - Fixed: Solar mode on the Wall Charger now charges during daylight. It follows the sky clock, so it charges from 06:00 to 18:00 and pauses at night.
 - Changed: The mod no longer requires food for its vehicles (Tesla Model 3, Bicycle, Scooter, Moto, Jet Ski, School Bus and Steam Paddle Craft). Vehicle doors can be opened without food too.

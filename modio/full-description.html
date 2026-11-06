@@ -1,33 +1,31 @@
-<p>Hot Wheels brings new ground, water and electric vehicles to Eco, ported to the latest stable Eco release (0.14.2.1). The mod does not require food to drive its vehicles or to open their doors.</p>
-<p><strong>Known limitation:</strong> the Drive prompt on the driver seat still uses Eco's built-in hunger check, so it can show "You are too hungry to do that." Mods cannot change that core rule yet.</p>
-<h2>Vehicles</h2>
+<p>Hot Wheels Rework is an add-on to the <strong>Hot Wheels</strong> mod by Zangdar, for the latest stable Eco release (0.14.2.1). Hot Wheels is a required dependency: mod.io installs it automatically, and it provides all the vehicles and chargers. This add-on adds a new farming vehicle and solar mode for the Wall Charger on top.</p>
+<h2>Multi-Row Wheel Hoe</h2>
 <ul>
-<li>Scooter</li>
-<li>Bicycle</li>
-<li>Moto</li>
-<li>School Bus</li>
-<li>Steam Paddle Craft</li>
-<li>Tesla Model 3 (electric)</li>
-<li>Jet Ski</li>
+<li>A pushable wheel hoe with one front wheel, two long handles and three rows of tines, with its own 3D model.</li>
+<li>Grab the handles (E) to push it. As it moves, it tills a strip three blocks wide in front of it.</li>
+<li>Click it while on foot to switch plowing off or back on.</li>
+<li>Plowing costs no calories.</li>
+<li>Crafted at the Wainwright Table with Basic Engineering level 3, from iron bars, hewn logs, wood boards, a wooden wheel and lubricant.</li>
 </ul>
-<h2>Electric charging</h2>
+<h2>Solar mode for the Wall Charger</h2>
 <ul>
-<li>Wall Charger: charges electric vehicles at 2,350 W from the grid. Use its Charger tab to connect or disconnect a vehicle, or to toggle Solar Mode.</li>
-<li>Solar Mode: charges vehicles from daylight, with no grid power used. At night the car stays connected and charging pauses until morning.</li>
-<li>Tesla Supercharger</li>
-<li>Electric vehicles show a trip odometer and battery used per trip in their status.</li>
+<li>The Wall Charger gets a <strong>Solar Charging</strong> tab with its status and a Toggle Solar Mode button.</li>
+<li>With solar mode on, the charger uses no grid power and charges the connected vehicle only in daylight (06:00 to 18:00 on the sky clock).</li>
+<li>At night it switches itself off and the vehicle stays connected. It switches back on in the morning.</li>
 </ul>
 <h2>Installation</h2>
 <ol>
-<li>Download the zip (contains HotWheels.dll, HotWheels-v3.2.0.unity3d and modinfo.json).</li>
-<li>Extract it into <code>Eco_Data/Server/Mods/HotWheels/</code> on your Eco server.</li>
+<li>Subscribe on mod.io. Hot Wheels by Zangdar is installed with it.</li>
+<li>For a manual install, first install Hot Wheels as its page describes, then extract this zip into <code>Eco_Data/Server/</code>. It contains <code>Mods/UserCode/HotWheelsRework/</code> with the source files, the Hoe bundle and modinfo.json. Remove any older HotWheelsRework.dll from your Mods folder.</li>
 <li>Restart the server.</li>
 </ol>
 <h2>Changelog</h2>
 <ul>
-<li><strong>3.4.1</strong> &mdash; Solar Mode charges during daylight (06:00 to 18:00 on the sky clock). The mod no longer requires food for its vehicles. Known limitation: the driver seat's Drive prompt still uses Eco's built-in hunger check.</li>
-<li><strong>3.4.0</strong> &mdash; Solar mode for the Wall Charger. Trip odometer and energy log for electric vehicles. New Charger tab on the Wall Charger with its buttons. Wall Charger charge speed raised to 2,350 W. Property change notifications updated to build against Eco 0.14.2.1.</li>
-<li><strong>3.3.0</strong> &mdash; Ported to Eco 0.14.2.1. Fixed a build error in the charger component.</li>
+<li><strong>4.1.0</strong> &mdash; Solar mode for the Wall Charger is back, with its own Solar Charging tab. How to use section on the Hoe's Ecopedia page. Rework now ships as source in Mods/UserCode.</li>
+<li><strong>4.0.0</strong> &mdash; Now an add-on to Hot Wheels by Zangdar (required dependency). New Multi-Row Wheel Hoe. Removed our copies of the original vehicles and chargers, along with the earlier fixes to them.</li>
+<li><strong>3.4.1</strong> &mdash; Solar Mode charges during daylight. The mod no longer required food for its vehicles.</li>
+<li><strong>3.4.0</strong> &mdash; Solar mode for the Wall Charger, trip odometer and energy log for electric vehicles, Charger tab on the Wall Charger, charge speed raised to 2,350 W.</li>
+<li><strong>3.3.0</strong> &mdash; Ported to Eco 0.14.2.1.</li>
 </ul>
 <h2>Credits</h2>
-<p>Original mod by Zangdar. Rework and port by Beinded (JuanBerta).<br>Source: <a href="https://github.com/JuanBerta/Eco-HotWheels">https://github.com/JuanBerta/Eco-HotWheels</a></p>
+<p>Hot Wheels by Zangdar. Hot Wheels Rework and the Multi-Row Wheel Hoe by Beinded (JuanBerta).<br>Source: <a href="https://github.com/JuanBerta/Eco-HotWheels">https://github.com/JuanBerta/Eco-HotWheels</a></p>

@@ -4,13 +4,38 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>disable</Nullable>
-    <AssemblyName>HotWheels</AssemblyName>
-    <RootNamespace>CavRnMods.HotWheels</RootNamespace>
+    <AssemblyName>HotWheelsRework</AssemblyName>
+    <RootNamespace>CavRnMods.HotWheelsRework</RootNamespace>
     <NoWarn>$(NoWarn);CA1416</NoWarn>
-    <Version>3.4.1</Version>
-    <AssemblyVersion>3.4.1.0</AssemblyVersion>
-    <FileVersion>3.4.1.0</FileVersion>
+    <Version>4.1.0</Version>
+    <AssemblyVersion>4.1.0.0</AssemblyVersion>
+    <FileVersion>4.1.0.0</FileVersion>
   </PropertyGroup>
+
+  <!--
+    Hot Wheels Rework is an add-on to the original "[14.2.1] Hot Wheels" mod (mod.io dependency), which ships the
+    scooter, bicycle, moto, school bus, paddle craft, Tesla, jet ski and the chargers as source in Mods/UserCode.
+    Our earlier port of those classes is kept in the repo for reference but must not be compiled: the same classes in
+    two places would clash on the server.
+  -->
+  <ItemGroup>
+    <Compile Remove="Vehicles\Bicycle.cs;Vehicles\JetSki.cs;Vehicles\Moto.cs;Vehicles\SchoolBus.cs;Vehicles\Scooter.cs;Vehicles\SteamPaddleCraft.cs;Vehicles\TeslaModel3.cs" />
+    <Compile Remove="Components\ChargerComponent.cs;Components\ChargerControlsComponent.cs;Components\ElectricCarComponent.cs" />
+    <Compile Remove="Items\**;WorldObjects\**" />
+    <Compile Remove="Unity\**" />
+  </ItemGroup>
+
+  <!--
+    Compile-check only: Rework ships as source in Mods/UserCode and extends the original mod's partial classes, so the
+    original's source (installed on the local server through the mod.io dependency) is compiled alongside it here.
+    It is not part of the Rework package.
+  -->
+  <PropertyGroup>
+    <OriginalHotWheelsSource>D:\SteamLibrary\steamapps\common\Eco\Eco_Data\Server\Mods\UserCode\CavRnMods\HotWheels</OriginalHotWheelsSource>
+  </PropertyGroup>
+  <ItemGroup Condition="Exists('$(OriginalHotWheelsSource)')">
+    <Compile Include="$(OriginalHotWheelsSource)\**\*.cs" Link="_OriginalHotWheels\%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Eco.ReferenceAssemblies" Version="0.14.2.1-beta-release-1106" />

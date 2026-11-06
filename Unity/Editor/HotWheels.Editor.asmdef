@@ -1,0 +1,16 @@
+{
+    "name": "HotWheels.Editor",
+    "rootNamespace": "",
+    "references": [ "Eco.Client", "Eco.Client.Utils", "ThirdParty" ],
+    "includePlatforms": [ "Editor" ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
+
+
