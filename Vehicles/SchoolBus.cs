@@ -160,7 +160,7 @@ namespace CavRnMods.HotWheels
             }
         }
 
-        [Interaction(InteractionTrigger.RightClick, "Door", authRequired: AccessType.ConsumerAccess, requiredEnvVars: new[] { "Door" })]
+        [Interaction(InteractionTrigger.RightClick, "Door", authRequired: AccessType.ConsumerAccess, requiredEnvVars: new[] { "Door" }, MinCaloriesRequired = 0)]
         public void Door(Player player, InteractionTriggerInfo trigger, InteractionTarget target)
         {
             var isOpened = this.AnimatedStates.GetOrDefault("Door") as bool? ?? false;

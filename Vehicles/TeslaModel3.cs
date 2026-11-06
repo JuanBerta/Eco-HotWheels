@@ -148,28 +148,28 @@ namespace CavRnMods.HotWheels
             }
         }
 
-        [Interaction(InteractionTrigger.RightClick, "DriverDoor", authRequired: AccessType.OwnerAccess, requiredEnvVars: new[] { "DriverDoor" })]
+        [Interaction(InteractionTrigger.RightClick, "DriverDoor", authRequired: AccessType.OwnerAccess, requiredEnvVars: new[] { "DriverDoor" }, MinCaloriesRequired = 0)]
         public void DriverDoor(Player player, InteractionTriggerInfo trigger, InteractionTarget target)
         {
             var isOpened = this.AnimatedStates.GetOrDefault("DriverDoor") as bool? ?? false;
             this.SetAnimatedState("DriverDoor", !isOpened);
         }
 
-        [Interaction(InteractionTrigger.RightClick, "PassengerDoor", authRequired: AccessType.ConsumerAccess, requiredEnvVars: new[] { "PassengerDoor" })]
+        [Interaction(InteractionTrigger.RightClick, "PassengerDoor", authRequired: AccessType.ConsumerAccess, requiredEnvVars: new[] { "PassengerDoor" }, MinCaloriesRequired = 0)]
         public void PassengerDoor(Player player, InteractionTriggerInfo trigger, InteractionTarget target)
         {
             var isOpened = this.AnimatedStates.GetOrDefault("PassengerDoor") as bool? ?? false;
             this.SetAnimatedState("PassengerDoor", !isOpened);
         }
 
-        [Interaction(InteractionTrigger.RightClick, "RearRightDoor", authRequired: AccessType.ConsumerAccess, requiredEnvVars: new[] { "RearRightDoor" })]
+        [Interaction(InteractionTrigger.RightClick, "RearRightDoor", authRequired: AccessType.ConsumerAccess, requiredEnvVars: new[] { "RearRightDoor" }, MinCaloriesRequired = 0)]
         public void RearRightDoor(Player player, InteractionTriggerInfo trigger, InteractionTarget target)
         {
             var isOpened = this.AnimatedStates.GetOrDefault("RearRightDoor") as bool? ?? false;
             this.SetAnimatedState("RearRightDoor", !isOpened);
         }
 
-        [Interaction(InteractionTrigger.RightClick, "RearLeftDoor", authRequired: AccessType.ConsumerAccess, requiredEnvVars: new[] { "RearLeftDoor" })]
+        [Interaction(InteractionTrigger.RightClick, "RearLeftDoor", authRequired: AccessType.ConsumerAccess, requiredEnvVars: new[] { "RearLeftDoor" }, MinCaloriesRequired = 0)]
         public void RearLeftDoor(Player player, InteractionTriggerInfo trigger, InteractionTarget target)
         {
             var isOpened = this.AnimatedStates.GetOrDefault("RearLeftDoor") as bool? ?? false;
