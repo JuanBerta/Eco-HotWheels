@@ -1,4 +1,4 @@
-﻿namespace CavRnMods.HotWheels
+namespace CavRnMods.HotWheels
 {
     using Eco.Gameplay.Components.Storage;
     using Eco.Core.Controller;

@@ -1,4 +1,4 @@
-﻿namespace CavRnMods.HotWheels
+namespace CavRnMods.HotWheels
 {
     using Eco.Gameplay.Components.Storage;
     using Eco.Core.Controller;
@@ -131,7 +131,6 @@
         {
             this.ModsPreInitialize();
             base.Initialize();
-            this.GetComponent<VehicleComponent>().HumanPowered(0.75f);
             this.GetComponent<PublicStorageComponent>().Initialize(4, 120000);
             this.GetComponent<PublicStorageComponent>().Storage.AddInvRestriction(new NotCarriedRestriction());
             this.GetComponent<MinimapComponent>().InitAsMovable();
@@ -139,7 +138,6 @@
             this.GetComponent<VehicleComponent>().Initialize(24, 2, 2, null, true);
             this.GetComponent<ElectricCarComponent>().Initialize(2625000, 2000);
             this.GetComponent<BoatComponent>().Size = BoatComponent.BoatSize.Small;
-            this.GetComponent<VehicleComponent>().FailDriveMsg = Localizer.Do($"You are too hungry to drive {this.DisplayName}!");
             this.ModsPostInitialize();
                         {
                 this.GetComponent<PartsComponent>().Config(() => LocString.Empty, new PartInfo[]

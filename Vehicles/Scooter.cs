@@ -1,4 +1,4 @@
-﻿namespace CavRnMods.HotWheels
+namespace CavRnMods.HotWheels
 {
     using Eco.Core.Controller;
     using Eco.Core.Items;
@@ -118,11 +118,9 @@
             this.ModsPreInitialize();
             base.Initialize();
             this.GetComponent<CustomTextComponent>().Initialize(200);
-            this.GetComponent<VehicleComponent>().HumanPowered(0.25f);
             this.GetComponent<MinimapComponent>().InitAsMovable();
             this.GetComponent<MinimapComponent>().SetCategory(Localizer.DoStr("Vehicles"));
             this.GetComponent<VehicleComponent>().Initialize(22, 2.5f, 1, null, true);
-            this.GetComponent<VehicleComponent>().FailDriveMsg = Localizer.Do($"You are too hungry to drive {this.DisplayName}!");
             this.ModsPostInitialize();
                         {
                 this.GetComponent<PartsComponent>().Config(() => LocString.Empty, new PartInfo[]
