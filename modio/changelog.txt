@@ -1,6 +1,6 @@
 3.4.1
 - Fixed: Solar mode on the Wall Charger now charges during daylight. It follows the sky clock, so it charges from 06:00 to 18:00 and pauses at night.
-- Changed: The Tesla Model 3 no longer needs food to drive. The other vehicles still do.
+- Changed: No vehicle needs food to drive anymore. This applies to all vehicles in the mod, including the Tesla Model 3, Bicycle, Scooter, Moto, Jet Ski, School Bus and Steam Paddle Craft.
 
 3.4.0
 - New: Solar mode for the Wall Charger. Use the Toggle Solar Mode button to charge electric vehicles only during daylight, without using grid power. At night the car stays connected and charging pauses.
