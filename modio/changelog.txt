@@ -1,0 +1,14 @@
+3.4.1
+- Fixed: Solar mode on the Wall Charger now charges during daylight. It follows the sky clock, so it charges from 06:00 to 18:00 and pauses at night.
+- Changed: The Tesla Model 3 no longer needs food to drive. The other vehicles still do.
+
+3.4.0
+- New: Solar mode for the Wall Charger. Use the Toggle Solar Mode button to charge electric vehicles only during daylight, without using grid power. At night the car stays connected and charging pauses.
+- New: Trip odometer and energy log for electric vehicles. The vehicle status shows distance driven and battery used since the last reset. Clearing the vehicle's data resets the trip.
+- New: The Wall Charger has its own Charger tab with its status and the Connect Nearest Vehicle, Disconnect Vehicle and Toggle Solar Mode buttons.
+- Changed: Wall Charger charge speed raised from 750 W to 2,350 W.
+- Changed: Property change notifications are now updated manually, so the mod builds against Eco 0.14.2.1.
+
+3.3.0
+- Ported to the latest stable Eco release (0.14.2.1).
+- Fixed a build error in the charger component.

@@ -27,6 +27,12 @@ namespace CavRnMods.HotWheels
 
         [Serialized, SyncToView] public float CurrentWatts { get; set; }
 
+        /// <summary>Meters driven since the last trip reset.</summary>
+        [Serialized, SyncToView] public float TripMeters { get; set; }
+
+        /// <summary>Battery percentage points drained since the last trip reset.</summary>
+        [Serialized, SyncToView] public float TripBatteryUsedPercent { get; set; }
+
         public bool HasDataThatCanBeCleared => false;
 
         public ElectricCarComponent? Parent { get; set; }
@@ -34,6 +40,8 @@ namespace CavRnMods.HotWheels
         public Result TryHandleClearRequest(Player player)
         {
             this.CurrentWatts = 0;
+            this.TripMeters = 0;
+            this.TripBatteryUsedPercent = 0;
             return Result.Succeeded;
         }
     }
@@ -51,11 +59,23 @@ namespace CavRnMods.HotWheels
 
         public object PersistentData { get => this.ElectricCarItemData; set => this.ElectricCarItemData = value as ElectricCarItemData ?? new ElectricCarItemData(); }
 
-        [Notify] public bool IsCharging { get; set; }
+        private bool isCharging;
+        public bool IsCharging
+        {
+            get => this.isCharging;
+            set
+            {
+                if (this.isCharging == value) return;
+                this.isCharging = value;
+                this.Changed(nameof(this.IsCharging));
+            }
+        }
         public float CurrentChargeSpeed { get; set; }
         public float BatteryPercent => (float)Math.Round(this.ElectricCarItemData.CurrentWatts / this.MaxWatts * 100, 2);
         private float ConsumptionPerSecond { get; set; }
         public float MaxWatts { get; private set; }
+
+        private System.Numerics.Vector3? lastTripPosition;
 
         public void Initialize(float maxWatts, float joulesPerSecond)
         {
@@ -81,6 +101,8 @@ namespace CavRnMods.HotWheels
 
             if (!this.IsCharging)
             {
+                var wattsBefore = this.ElectricCarItemData.CurrentWatts;
+
                 if (!this.vehicle!.IsMoving)
                 {
                     this.ElectricCarItemData.CurrentWatts -= this.ConsumptionPerSecond * deltaTime / 432;
@@ -91,6 +113,31 @@ namespace CavRnMods.HotWheels
                 }
 
                 if (this.ElectricCarItemData.CurrentWatts <= 0) this.ElectricCarItemData.CurrentWatts = 0;
+
+                // Weaving is disabled for this class, so drivability changes are raised manually when the battery crosses empty.
+                if ((wattsBefore > 0) != (this.ElectricCarItemData.CurrentWatts > 0)) this.NotifyDrivingChange();
+
+                // Trip energy log: battery points drained while not charging.
+                var drained = wattsBefore - this.ElectricCarItemData.CurrentWatts;
+                if (drained > 0 && this.MaxWatts > 0)
+                {
+                    this.ElectricCarItemData.TripBatteryUsedPercent += drained / this.MaxWatts * 100f;
+                }
+            }
+
+            // Trip odometer: accumulate distance only while the vehicle is moving.
+            if (this.vehicle!.IsMoving)
+            {
+                var position = this.Parent.Position;
+                if (this.lastTripPosition is { } last)
+                {
+                    this.ElectricCarItemData.TripMeters += System.Numerics.Vector3.Distance(last, position);
+                }
+                this.lastTripPosition = position;
+            }
+            else
+            {
+                this.lastTripPosition = null;
             }
         }
 
@@ -108,12 +155,13 @@ namespace CavRnMods.HotWheels
             this.Parent.SetAnimatedState("BatteryPercent", $"{Math.Round(this.BatteryPercent)}%");
             this.Parent.SetAnimatedState("CurrentChargeSpeed", this.CurrentChargeSpeed > 0 ? $"{Math.Round(this.CurrentChargeSpeed / 1000, 1)}kW" : "");
             this.Parent.SetAnimatedState("IsCharging", this.IsCharging);
+            var tripText = $"Trip: {Math.Round(this.ElectricCarItemData.TripMeters / 1000f, 2)} km, {Math.Round(this.ElectricCarItemData.TripBatteryUsedPercent, 1)}% battery used";
             this.status?.SetStatusMessage(
                 !(this.IsCharging || this.ElectricCarItemData.CurrentWatts == 0),
-                Localizer.DoStr($"Battery is ({this.BatteryPercent}%)"),
+                Localizer.DoStr($"Battery is ({this.BatteryPercent}%). {tripText}"),
                 this.IsCharging
-                    ? Localizer.DoStr($"Battery is charging... ({this.BatteryPercent}%)")
-                    : Localizer.DoStr("Battery is empty!")
+                    ? Localizer.DoStr($"Battery is charging... ({this.BatteryPercent}%). {tripText}")
+                    : Localizer.DoStr($"Battery is empty! {tripText}")
                 );
         }
     }

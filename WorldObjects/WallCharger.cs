@@ -22,6 +22,7 @@
     [RequireComponent(typeof(ForSaleComponent))]
     [RequireComponent(typeof(PowerGridComponent))]
     [RequireComponent(typeof(ChargerComponent))]
+    [RequireComponent(typeof(ChargerControlsComponent))]
     [RequireComponent(typeof(OnOffComponent))]
     [Tag("Usable")]
     public partial class WallChargerObject : WorldObject, IRepresentsItem
@@ -33,7 +34,7 @@
         protected override void Initialize()
         {
             this.GetComponent<PowerGridComponent>().Initialize(10, new ElectricPower());
-            this.GetComponent<ChargerComponent>().Initialize(3, 750f);
+            this.GetComponent<ChargerComponent>().Initialize(3, 2350f, false, true);
         }
     }
 

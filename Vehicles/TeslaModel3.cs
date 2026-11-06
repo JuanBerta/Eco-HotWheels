@@ -133,13 +133,11 @@
         {
             base.Initialize();
             this.GetComponent<CustomTextComponent>().Initialize(200);
-            this.GetComponent<VehicleComponent>().HumanPowered(1);
             this.GetComponent<PublicStorageComponent>().Initialize(16, 2000000);
             this.GetComponent<MinimapComponent>().InitAsMovable();
             this.GetComponent<MinimapComponent>().SetCategory(Localizer.DoStr("Vehicles"));
             this.GetComponent<VehicleComponent>().Initialize(48, 5, 5);
             this.GetComponent<ElectricCarComponent>().Initialize(5250000, 5000);
-            this.GetComponent<VehicleComponent>().FailDriveMsg = Localizer.Do($"You are too hungry to drive {this.DisplayName}!");
             {
                 this.GetComponent<PartsComponent>().Config(() => LocString.Empty, new PartInfo[]
                 {

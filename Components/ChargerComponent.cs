@@ -15,6 +15,7 @@
     using Eco.Shared.Serialization;
     using Eco.Shared.SharedTypes;
     using Eco.Shared.Utils;
+    using Eco.Simulation.Time;
     using System;
 
     [Serialized]
@@ -32,14 +33,20 @@
 
         [Serialized] private ThreadSafeList<Guid> attachedVehicleId = new();
         [EnvVar] private bool HasConnectedVehicle => this.attachedVehicleId.Count == 1;
-        public bool Operating => this.HasConnectedVehicle;
+        // In solar mode the charger draws no grid power, so it is not an operating grid load.
+        public bool Operating => this.HasConnectedVehicle && !this.solarMode;
 
-        [SyncToView, Autogen, PropReadOnly, UITypeName("StringDisplay")] public string ChargerStatus
+        [SyncToView] public string ChargerStatus
         {
             get
             {
                 if (this.TryGetCar(out var car))
                 {
+                    if (this.solarMode)
+                    {
+                        return $"{car!.Parent.DisplayName} is connected, battery at {car.BatteryPercent}%, solar mode: {(IsDaylight() ? $"charging at {this.maxChargeSpeed}W" : "waiting for daylight")}";
+                    }
+
                     return $"{car!.Parent.DisplayName} is connected, battery at {car.BatteryPercent}%, charging at {this.maxChargeSpeed}W";
                 }
 
@@ -50,12 +57,18 @@
         private int connectRadius;
         private float maxChargeSpeed;
         private bool autoDetach;
+        private bool solarCapable;
+        [Serialized] private bool solarMode;
 
-        public void Initialize(int connectRadiusValue = 3, float maxChargeSpeedValue = 500f, bool autoDetachValue = false)
+        /// <summary>True when this charger runs on daylight instead of grid power.</summary>
+        public bool SolarMode => this.solarMode;
+
+        public void Initialize(int connectRadiusValue = 3, float maxChargeSpeedValue = 500f, bool autoDetachValue = false, bool solarCapableValue = false)
         {
             this.connectRadius = connectRadiusValue;
             this.maxChargeSpeed = maxChargeSpeedValue;
             this.autoDetach = autoDetachValue;
+            this.solarCapable = solarCapableValue;
             this.status = this.Parent.GetComponent<StatusComponent>().CreateStatusElement();
             this.powerConsumptionComponent = this.Parent.GetComponent<PowerConsumptionComponent>();
             this.powerConsumptionComponent.Initialize(maxChargeSpeedValue);
@@ -94,12 +107,12 @@
             return carObject?.GetComponent<ElectricCarComponent>();
         }
 
-        [Autogen, RPC, UITypeName("BigButton")] public void ConnectNearestVehicle(Player player) => this.ConnectNearestVehicleInternal(player, default, default);
+        public void ConnectNearestVehicle(Player player) => this.ConnectNearestVehicleInternal(player, default, default);
 
         [Interaction(InteractionTrigger.RightClick, "Connect Nearest Vehicle", authRequired: AccessType.FullAccess, RequiredAccess = AccessType.ConsumerAccess)]
         public void ConnectNearestVehicleInternal(Player player, InteractionTriggerInfo triggerInfo, InteractionTarget target)
         {
-            if (!this.Parent.Enabled)
+            if (!this.Parent.Enabled && !this.solarMode)
             {
                 player.ErrorLocStr("Charger is not working! Check status.");
                 return;
@@ -130,7 +143,22 @@
             player.ErrorLocStr($"Can't find any authorized non-charging {(this.autoDetach ? "non-empty " : "")}electric vehicle within {this.connectRadius} meters!");
         }
 
-        [Autogen, RPC, UITypeName("BigButton")] public void DisconnectNearestVehicle(Player player) => this.DisconnectVehicleInternal(player, default, default);
+        public void ToggleSolarMode(Player player)
+        {
+            if (!this.solarCapable)
+            {
+                player.ErrorLocStr("This charger has no solar mode.");
+                return;
+            }
+
+            // Switching modes with a car attached is fine: the next tick applies the new rate.
+            this.solarMode = !this.solarMode;
+            player.InfoBoxLocStr(this.solarMode
+                ? "Solar mode on: charges only in daylight, using no grid power."
+                : "Solar mode off: charges from the grid.");
+        }
+
+        public void DisconnectNearestVehicle(Player player) => this.DisconnectVehicleInternal(player, default, default);
 
         [Interaction(InteractionTrigger.RightClick, "Disconnect Vehicle", modifier: InteractionModifier.Shift, authRequired: AccessType.FullAccess, RequiredAccess = AccessType.ConsumerAccess)]
         public void DisconnectVehicleInternal(Player player, InteractionTriggerInfo triggerInfo, InteractionTarget target)
@@ -198,12 +226,32 @@
             return true;
         }
 
+        /// <summary>True between 06:00 and 18:00 on the sky clock, the same time of day players see.</summary>
+        private static bool IsDaylight()
+        {
+            var hour = WorldTime.SkyTimeOfDay;
+            return hour >= 6f && hour < 18f;
+        }
+
         public override void Tick() => this.Tick(this.Parent.SimTickDelta());
         private void Tick(float deltaTime)
         {
             if (this.TryGetCar(out var car))
             {
-                if (this.Parent.Enabled)
+                if (this.solarMode)
+                {
+                    // Solar mode charges at full rate in daylight and pauses at night, without grid power.
+                    if (IsDaylight())
+                    {
+                        car!.CurrentChargeSpeed = this.maxChargeSpeed;
+                        car.ElectricCarItemData.CurrentWatts += this.maxChargeSpeed * deltaTime;
+                    }
+                    else
+                    {
+                        car!.CurrentChargeSpeed = 0f;
+                    }
+                }
+                else if (this.Parent.Enabled)
                 {
                     car!.CurrentChargeSpeed = this.maxChargeSpeed;
                     car.ElectricCarItemData.CurrentWatts += this.maxChargeSpeed * deltaTime;
