@@ -2,7 +2,7 @@
 
 Hot Wheels brings new vehicles and boats to [Eco](https://play.eco/): ride a scooter, bicycle, moto, school bus, steam paddle craft, Tesla Model 3 or jet ski, and charge electric vehicles at home or at a Tesla Supercharger.
 
-- Original mod: [mod.io – Hot Wheels](https://mod.io/g/eco/m/hot-wheels) (by CavRnMods)
+- Original mod: [mod.io – Hot Wheels](https://mod.io/g/eco/m/hot-wheels) (by Zangdar)
 - This repository: port of v3.2.0 to **Eco 0.14.2.1** (public branch, release-1106), version **3.3.0**
 
 ## Contents
@@ -46,5 +46,5 @@ The project references `Eco.ReferenceAssemblies 0.14.2.1-beta-release-1106` from
 
 ## Credits
 
-- Original Hot Wheels mod by **CavRnMods**.
+- Original Hot Wheels mod by **Zangdar**.
 - Port and maintenance by **Beinded (JuanBerta)**.
